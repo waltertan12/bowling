@@ -2,10 +2,24 @@
 <html>
 <head>
   <title>Bowling</title>
-  <script src='./js/frame.js'></script>
-  <script src='./js/bowling.js'></script>
+  <link rel="stylesheet" href="./assets/main.css">
+  <script type="text/javascript" src="./js/frame.js"></script>
+  <script type="text/javascript" src="./js/bowling.js"></script>
+  <script type="text/javascript" src="./js/game.js"></script>
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', (e) => {
+      var scoreboard = document.getElementById('scoreboard');
+      var button = document.getElementById('bowl-button');
+      var game = new Game(scoreboard);
+
+      button.addEventListener('click', (e) => {
+        game.bowl();
+      }, false);
+    }, false);
+  </script>
 </head>
 <body>
-
+  <div id="scoreboard"></div>
+  <button id="bowl-button" class="btn">Bowl!</button>
 </body>
 </html>

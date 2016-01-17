@@ -1,8 +1,15 @@
-var FRAMES   = 10;
+const FRAMES   = 10;
 
-var Bowling = function () {
+const Bowling = function () {
   this.scoreBoard = [];
   this.frameNumber = 0;
+};
+
+Bowling.prototype.print = function () {
+  var result = this.scoreBoard.map(function (frame) {
+    return frame.history;
+  })
+  return result;
 };
 
 Bowling.prototype.bowl = function (type, numToRemove) {
@@ -12,6 +19,7 @@ Bowling.prototype.bowl = function (type, numToRemove) {
   if (typeof frame === 'undefined') {
     frame = new Frame(this.frameNumber, this.scoreBoard);
     this.scoreBoard.push(frame);
+  // Create new frame if previous frame is finished
   } else if ((frame.rolls > 1 || frame.pins === 0) && 
               this.frameNumber < 9) {
     this.frameNumber++;
@@ -27,16 +35,17 @@ Bowling.prototype.bowl = function (type, numToRemove) {
 };
 
 Bowling.prototype.normal = function (frame, type, numToRemove) {
-  if (frame.rolls < 2 && frame.pins > 0) {
-    frame.bowl(type, numToRemove);
-  } else 
-    this.frameNumber++;
-    
+  frame.bowl(type, numToRemove);
 };
 
-Bowling.prototype.lastFrame = function (frame, type) {
-  if (frame.rolls > 2)
-    console.log('wtf');
+Bowling.prototype.lastFrame = function (frame, type, numToRemove) {
+  if (frame.rolls < 2) {
+    if (frame.pins === 0) frame.resetPins(); // Add 10 pins
+    frame.bowl(type, numToRemove);
+  } else if (frame.canBowlExtra()) {
+    frame.resetPins();
+    frame.bowl(type, numToRemove);
+  }
   else
-    console.log('bowl!');
+    console.error('hmm...');
 };

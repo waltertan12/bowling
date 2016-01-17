@@ -1,8 +1,8 @@
 'use strict';
 
-var NUM_PINS = 10;
+const NUM_PINS = 10;
 
-var Frame = function (frameNumber, scoreBoard) {
+const Frame = function (frameNumber, scoreBoard) {
   this.rolls = 0;
   this.pins = NUM_PINS;
   this.history = [];
@@ -86,7 +86,8 @@ Frame.prototype.isSpare = function (num) {
 
 Frame.prototype.canBowlExtra = function () {
   return (
-    this.frameNumber === 10 && 
-    (this.isSpare() || this.isStrike())
+    this.frameNumber === 9 && 
+    (this.isSpare() || this.isStrike()) &&
+    this.rolls === 2
   );
 };
