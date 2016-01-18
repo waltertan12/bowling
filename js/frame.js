@@ -27,43 +27,58 @@
         toRemove = Math.floor(Math.random() * (this.pins + 1));
         break;
     }
-    
+
     this.remove(toRemove);
     this.history[this.rolls] = toRemove;
     this.rolls++;
   };
 
   Frame.prototype.nextFrame = function () {
-    return scoreBoard[this.frameNumber + 1];
+    return this.scoreBoard[this.frameNumber + 1];
   };
 
-  Frame.prototype.getNextRolls = function (num) {
-    var result = [], nextFrame = this.nextFrame();
+  Frame.prototype.getPinsFromNextRolls = function (num) {
+    var pins = 0, nextFrame = this.nextFrame();
+    if (!nextFrame || !nextFrame.history[0]) return 'NOPE';
 
-    // TODO: Add error handling if nextFrame doesn't exist
+    // TODO: Refactor error
     switch (num) {
       case 1:
-        result.push(nextFrame().history[0]);
+        pins += nextFrame.history[0];
         break;
       case 2:
-        result.push(nextFrame().history[0]);
-        if (nextFrame.isStrike())
-          result.push(nextFrame.nextFrame().history[0])
-        else
-          result.push(nextFrame().history[1]);
+        pins += nextFrame.history[0];
+        if (nextFrame.isStrike()) {
+          if (!nextFrame.nextFrame() || 
+              !nextFrame.nextFrame().history[0]) 
+            return 'NOPE';
+          else
+            pins += nextFrame.nextFrame().history[0]
+        } else {
+          if (typeof nextFrame.history[1] === 'undefined')
+            return 'NOPE';
+          else
+            pins += nextFrame.history[1];
+        }
         break;
     }
 
-    return result;
+    return pins;
   };
 
   Frame.prototype.score = function () {
-    if (this.isStrike())
-      return 10;
-    else if (this.isSpare())
-      return 10 + this.nextFrame().history[0];
-    else
+    var additional;
+    if (this.isStrike()) {
+      additional = this.getPinsFromNextRolls(2);
+      if (additional === 'NOPE')
+        return;
+      else
+        return 10 + additional;
+    } else if (this.isSpare()) {
+      return 10 + this.getPinsFromNextRolls(1);
+    } else {
       return NUM_PINS - this.pins; 
+    }
   };
 
   Frame.prototype.remove = function (num) {
