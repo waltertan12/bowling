@@ -1,4 +1,6 @@
 (function (root) {
+  'use strict';
+
   const isReallyNan = function (x) {
     return x !== x;
   };
@@ -19,6 +21,7 @@
   };
 
   Game.prototype._reset = function () {
+    var children;
     for (var i = 0; i < 10; i++) {
       children = this.div.children[i].children;
       if (i < 9) {
@@ -35,7 +38,7 @@
   };
 
   Game.prototype.actuate = function () {
-    var child, frame, totalScore = 0;
+    var children, frame, totalScore = 0;
     for (var i = 0; i < 10; i++) {
       frame = this.bowling.scoreBoard[i];
       if (typeof frame === 'undefined') break;

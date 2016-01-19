@@ -27,7 +27,6 @@
           toRemove = numToRemove;
         break;
       default: // Remove random number
-        console.log('default!');
         toRemove = Math.floor(Math.random() * (this.pins + 1));
         break;
     }

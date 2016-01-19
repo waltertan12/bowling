@@ -1,28 +1,10 @@
 (function (root) {
+  'use strict';
   const FRAMES   = 10;
 
   const Bowling = root.Bowling = function () {
     this.scoreBoard = [];
     this.frameNumber = 0;
-  };
-
-  Bowling.prototype.print = function () {
-    var result = this.scoreBoard.map(function (frame) {
-      return frame.history;
-    });
-
-    var totalScore = 0, score;
-    var otherResult = this.scoreBoard.map(function (frame) {
-      score = frame.score();
-      if (typeof score === 'number') {
-        totalScore += score;
-        return totalScore;
-      } else {
-        return '';
-      }
-    });
-
-    return { pins: result, score: otherResult };
   };
 
   Bowling.prototype.bowl = function (type, numToRemove) {
