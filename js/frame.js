@@ -9,6 +9,7 @@
     this.history = [];
     this.frameNumber = frameNumber;
     this.scoreBoard = scoreBoard;
+    this.finished = false;
   };
 
   Frame.prototype.bowl = function (type, numToRemove) {
@@ -39,45 +40,57 @@
 
   Frame.prototype.getPinsFromNextRolls = function (num) {
     var pins = 0, nextFrame = this.nextFrame();
-    if (!nextFrame || !nextFrame.history[0]) return 'NOPE';
+    if (typeof nextFrame === 'undefined' || 
+        typeof nextFrame.history[0] === 'undefined') return 'NOPE';
+    pins += nextFrame.history[0];
 
     // TODO: Refactor error
-    switch (num) {
-      case 1:
-        pins += nextFrame.history[0];
-        break;
-      case 2:
-        pins += nextFrame.history[0];
-        if (nextFrame.isStrike()) {
-          if (!nextFrame.nextFrame() || 
-              !nextFrame.nextFrame().history[0]) 
-            return 'NOPE';
-          else
-            pins += nextFrame.nextFrame().history[0]
-        } else {
-          if (typeof nextFrame.history[1] === 'undefined')
-            return 'NOPE';
-          else
-            pins += nextFrame.history[1];
-        }
-        break;
+    if (num === 2) {
+      var nextNextFrame = nextFrame.nextFrame();
+
+      if (nextFrame.isStrike() && this.frameNumber !== 8) {
+        if (typeof nextNextFrame === 'undefined' || 
+            typeof nextNextFrame.history[0] === 'undefined') return 'NOPE';
+        pins += nextNextFrame.history[0]
+      } else {
+        if (typeof nextFrame.history[1] === 'undefined') return 'NOPE';
+        pins += nextFrame.history[1];
+      }
     }
 
     return pins;
   };
 
   Frame.prototype.score = function () {
+    if (this.frameNumber !== 9) return this._scoreNormal();
+    else return this._scoreFinal();
+  };
+
+  Frame.prototype._scoreNormal = function () {
     var additional;
     if (this.isStrike()) {
       additional = this.getPinsFromNextRolls(2);
-      if (additional === 'NOPE')
-        return;
-      else
-        return 10 + additional;
+      // Return undefined if scoring is not yet complete
+      if (additional === 'NOPE') return;
+      else return 10 + additional;
     } else if (this.isSpare()) {
       return 10 + this.getPinsFromNextRolls(1);
-    } else {
-      return NUM_PINS - this.pins; 
+    } else if (this.finished) {
+      return NUM_PINS - this.pins;
+    }
+  };
+
+  Frame.prototype._scoreFinal = function () {
+    if (typeof this.history[0] !== 'undefined' &&
+        typeof this.history[1] !== 'undefined' &&
+        typeof this.history[2] !== 'undefined' &&
+        (this.isStrike() || this.isSpare())) {
+      this.finished = true;
+      return this.history[0] + this.history[1] + this.history[2];
+    } else if (typeof this.history[0] !== 'undefined' && 
+               typeof this.history[1] !== 'undefined') {
+      this.finished = true;
+      return this.history[0] + this.history[1];
     }
   };
 
