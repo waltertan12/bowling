@@ -8,13 +8,12 @@
   <script type="text/javascript" src="./js/bowling.js"></script>
   <script type="text/javascript" src="./js/game.js"></script>
   <script type="text/javascript">
-    var game;
     document.addEventListener('DOMContentLoaded', (e) => {
       var scoreboard = document.getElementById('scoreboard');
       var bowl = document.getElementById('bowl-button');
       var strike = document.getElementById('strike-button');
       var reset = document.getElementById('reset-button');
-      game = new Game(scoreboard);
+      var game = new Game(scoreboard);
 
       bowl.addEventListener('click', (e) => {
         game.bowl();
