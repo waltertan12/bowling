@@ -13,6 +13,8 @@
       var bowl = document.getElementById('bowl-button');
       var strike = document.getElementById('strike-button');
       var reset = document.getElementById('reset-button');
+      var custom = document.getElementById('custom-button');
+      var input = document.getElementById('custom-input');
       var game = new Game(scoreboard);
 
       bowl.addEventListener('click', (e) => {
@@ -21,6 +23,11 @@
 
       strike.addEventListener('click', (e) => {
         game.bowl('AWESOME');
+      }, false);
+
+      custom.addEventListener('click', (e) => {
+        var pins = parseInt(input.value);
+        if (pins !== null && pins !== '' && pins > -1) game.bowl('NUM', pins);
       }, false);
 
       reset.addEventListener('click', (e) => {
@@ -33,7 +40,10 @@
   <h1>Bowling!</h1>
   <button id="bowl-button" class="btn primary">Bowl!</button>
   <button id="strike-button" class="btn success">Strike!</button>
+  <button id="custom-button" class="btn info">Custom!</button>
   <button id="reset-button" class="btn danger">Reset!</button>
+  <input id='custom-input' type='number' 
+         class='form-control' placeholder="10" />
   <ul id='scoreboard' class='scoreboard'>
     <li class='frame' id='frame-1'>
       <div class='frame-roll-1'></div>

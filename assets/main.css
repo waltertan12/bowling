@@ -42,7 +42,17 @@ body {
 
 .danger:hover {
   background-color: #c9302c;
-  border-color:     #ac2925;
+  border-color:     #ac2925;  
+}
+
+.info {
+  background-color: #5bc0de;
+  border-color:     #46b8da;
+}
+
+.info:hover {
+  background-color: #31b0d5;
+  border-color:     #269abc;
 }
 
 .scoreboard {
@@ -101,4 +111,16 @@ li.frame {
   width: 20px;
   height: 29px;
   border-bottom: 1px solid #000;
+}
+
+.form-control {
+  border-radius: 3px;
+  border:        1px solid lightgray;
+  padding:       5px;
+  transition-duration: 300ms;
+}
+.form-control:focus {
+  box-shadow:    inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+  border:        1px solid #66afe9;
+  outline:       none;
 }

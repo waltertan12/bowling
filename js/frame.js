@@ -21,7 +21,10 @@
         toRemove = pinsRemaining;
         break;
       case 'NUM': // Remove specified amount of pins
-        toRemove = numToRemove;
+        if (numToRemove > pinsRemaining)
+          toRemove = pinsRemaining;
+        else
+          toRemove = numToRemove;
         break;
       default: // Remove random number
         console.log('default!');
